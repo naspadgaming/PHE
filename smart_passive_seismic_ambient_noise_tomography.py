@@ -23,8 +23,13 @@ def preprocess_trace(tr, freqmin=0.1, freqmax=2.0):
 
 def load_station_traces(data_dir=DATA_DIR):
     files = sorted(glob.glob(os.path.join(data_dir, "*.mseed")))
+    files = [
+        f for f in files
+        if not os.path.basename(f).lower().startswith("gempa_")
+        and not os.path.basename(f).lower().endswith("_event.mseed")
+    ]
     if not files:
-        raise FileNotFoundError(f"Tidak ada file .mseed di folder: {data_dir}")
+        raise FileNotFoundError(f"Tidak ada file .mseed ambient noise di folder: {data_dir}")
 
     traces = {}
     for file in files:
